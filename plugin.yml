@@ -1,0 +1,8 @@
+name: Kohi1v1
+author: SavionLegends
+main: SavionLegends\Kohi1v1\Main
+description: Kohi/Pot 1v1 for MC:BE!
+version: "0.1"
+api:
+  - 3.0.0
+  - 3.2.5
