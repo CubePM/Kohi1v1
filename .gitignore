@@ -5,3 +5,4 @@ database.yml
 .DS_Store
 config.yml
 signs.yml
+matches.yml

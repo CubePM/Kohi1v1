@@ -33,9 +33,12 @@ class Main extends PluginBase{
         $this->saveDefaultConfig();
 
         $this->signConfig = new Config($this->getDataFolder()."signs.yml", Config::YAML, []);
+        $this->matchesConfig = new Config($this->getDataFolder()."matches.yml", Config::YAML, ["Kohi1v1" => []]);
 
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this, $this->utils), $this);
+
         FormAPI::register($this);
+        Utils::registerMatches();
 
         $this->getLogger()->info(TextFormat::GREEN."Enabled!");
     }
