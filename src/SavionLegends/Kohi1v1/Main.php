@@ -13,8 +13,6 @@ use SavionLegends\Kohi1v1\utils\Utils;
 class Main extends PluginBase{
 
     /* @var \pocketmine\utils\Config*/
-    public $signConfig;
-    /* @var \pocketmine\utils\Config*/
     public $matchesConfig;
 
     /* @var Utils*/
@@ -30,9 +28,6 @@ class Main extends PluginBase{
     }
 
     public function onEnable(){
-        $this->saveDefaultConfig();
-
-        $this->signConfig = new Config($this->getDataFolder()."signs.yml", Config::YAML, []);
         $this->matchesConfig = new Config($this->getDataFolder()."matches.yml", Config::YAML, ["Kohi1v1" => []]);
 
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this, $this->utils), $this);

@@ -3,6 +3,7 @@
 namespace SavionLegends\Kohi1v1\events;
 
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerJoinEvent;
 use SavionLegends\Kohi1v1\Main;
 use SavionLegends\Kohi1v1\utils\Utils;
 
@@ -33,5 +34,4 @@ class EventListener implements Listener{
     public function getUtils(): Utils{
         return $this->utils;
     }
-
 }
