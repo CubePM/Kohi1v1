@@ -2,12 +2,7 @@
 
 namespace SavionLegends\Kohi1v1\events;
 
-
-use pocketmine\block\Block;
-use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\tile\Sign;
 use SavionLegends\Kohi1v1\Main;
 use SavionLegends\Kohi1v1\utils\Utils;
 

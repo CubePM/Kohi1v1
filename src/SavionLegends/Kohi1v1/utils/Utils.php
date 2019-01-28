@@ -2,13 +2,17 @@
 
 namespace SavionLegends\Kohi1v1\utils;
 
+use FormAPI\FormAPI;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
+use SavionLegends\Kohi1v1\game\KohiClass;
 use SavionLegends\Kohi1v1\Main;
 
 class Utils{
 
     private $plugin;
+
+    public static $matches = [];
 
     /**
      * Utils constructor.
@@ -23,6 +27,12 @@ class Utils{
      */
     public function getPlugin(): Main{
         return $this->plugin;
+    }
+
+    public static function registerMatches(){
+        foreach(Main::getInstance()->matchesConfig->get("Kohi1v1") as $match){
+            self::$matches[$match["Name"]] = new KohiClass();//TODO
+        }
     }
 
     /**
@@ -56,14 +66,38 @@ class Utils{
         return $message;
     }
 
-    public function sendGameForm(){
+    /**
+     * @param Player $player
+     */
+    public function sendGameForm(Player $player){
+        $form = FormAPI::createSimpleForm([$this, "handleGameForm"]);
+        $form->setTitle("Kohi1v1");
+        $form->addButton("Join");
+        $form->sendToPlayer($player);
+    }
 
+    /**
+     * @param Player $player
+     * @param $response
+     */
+    public function handleGameForm(Player $player, $response): void{
+        if(!isset($response[0])){
+            return;
+        }
+        $this->joinGame($player);
     }
 
     /**
      * @param Player $player
      */
-    public function joinMatch(Player $player){
-        $player->sendMessage("Work in progress!");
+    public function joinGame(Player $player){
+        if(count(self::$matches) === 0){
+            $player->sendMessage(TextFormat::RED."No matches available!");
+            return;
+        }
+        $match = self::$matches[rand(1, count(self::$matches))];
+        if($match instanceof KohiClass){
+
+        }
     }
 }

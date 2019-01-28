@@ -14,17 +14,24 @@ class Main extends PluginBase{
 
     /* @var \pocketmine\utils\Config*/
     public $signConfig;
+    /* @var \pocketmine\utils\Config*/
+    public $matchesConfig;
 
     /* @var Utils*/
     private $utils;
 
+    /* @var \SavionLegends\Kohi1v1\Main*/
+    private static $instance;
+
     public function onLoad(){
+        self::$instance = $this;
         @mkdir($this->getDataFolder());
         $this->utils = new Utils($this);
     }
 
     public function onEnable(){
         $this->saveDefaultConfig();
+
         $this->signConfig = new Config($this->getDataFolder()."signs.yml", Config::YAML, []);
 
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this, $this->utils), $this);
@@ -35,5 +42,12 @@ class Main extends PluginBase{
 
     public function onDisable(){
 
+    }
+
+    /**
+     * @return Main
+     */
+    public static function getInstance(): Main{
+        return self::$instance;
     }
 }
