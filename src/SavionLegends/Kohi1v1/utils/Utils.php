@@ -2,6 +2,7 @@
 
 namespace SavionLegends\Kohi1v1\utils;
 
+use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use SavionLegends\Kohi1v1\Main;
 
@@ -9,6 +10,10 @@ class Utils{
 
     private $plugin;
 
+    /**
+     * Utils constructor.
+     * @param Main $plugin
+     */
     public function __construct(Main $plugin){
         $this->plugin = $plugin;
     }
@@ -49,5 +54,16 @@ class Utils{
         $message = str_replace("{ITALIC}", TextFormat::ITALIC, $message);
         $message = str_replace("{RESET}", TextFormat::RESET, $message);
         return $message;
+    }
+
+    public function sendGameForm(){
+
+    }
+
+    /**
+     * @param Player $player
+     */
+    public function joinMatch(Player $player){
+        $player->sendMessage("Work in progress!");
     }
 }

@@ -3,17 +3,26 @@
 namespace SavionLegends\Kohi1v1\events;
 
 
+use pocketmine\block\Block;
 use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\tile\Sign;
 use SavionLegends\Kohi1v1\Main;
+use SavionLegends\Kohi1v1\utils\Utils;
 
 class EventListener implements Listener{
 
-    private $plugin;
+    private $plugin, $utils;
 
-    public function __construct(Main $plugin){
+    /**
+     * EventListener constructor.
+     * @param Main $plugin
+     * @param Utils $utils
+     */
+    public function __construct(Main $plugin, Utils $utils){
         $this->plugin = $plugin;
+        $this->utils = $utils;
     }
 
     /**
@@ -23,15 +32,11 @@ class EventListener implements Listener{
         return $this->plugin;
     }
 
-    public function onSignChange(SignChangeEvent $event){
-        $player = $event->getPlayer();
-        $sign = $event->getBlock();
-        if($sign instanceof Sign){
-            if($player->hasPermission("kohi1v1.sign.set") && $event->getLine(0) === $this->getPlugin()->getConfig()->get("Sign-line-activate")){
-                $event->setLine(0, $this->getPlugin()->getUtils()->translateColors($this->getPlugin()->getConfig()->get("Sign-line-activate")));
-                $event->setLine(1, "Players: 0/0");
-                $event->setLine(2, "Waiting");
-            }
-        }
+    /**
+     * @return Utils
+     */
+    public function getUtils(): Utils{
+        return $this->utils;
     }
+
 }

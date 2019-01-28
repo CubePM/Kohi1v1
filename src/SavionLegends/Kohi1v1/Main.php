@@ -2,11 +2,13 @@
 
 namespace SavionLegends\Kohi1v1;
 
+use FormAPI\FormAPI;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use SavionLegends\Kohi1v1\events\EventListener;
 use SavionLegends\Kohi1v1\utils\Utils;
+
 
 class Main extends PluginBase{
 
@@ -17,27 +19,21 @@ class Main extends PluginBase{
     private $utils;
 
     public function onLoad(){
-        $this->utils = new Utils($this);
         @mkdir($this->getDataFolder());
+        $this->utils = new Utils($this);
     }
 
     public function onEnable(){
         $this->saveDefaultConfig();
         $this->signConfig = new Config($this->getDataFolder()."signs.yml", Config::YAML, []);
 
-        $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new EventListener($this, $this->utils), $this);
+        FormAPI::register($this);
 
         $this->getLogger()->info(TextFormat::GREEN."Enabled!");
     }
 
     public function onDisable(){
 
-    }
-
-    /**
-     * @return Utils
-     */
-    public function getUtils(): Utils{
-        return $this->utils;
     }
 }
