@@ -2,6 +2,9 @@
 
 namespace SavionLegends\Kohi1v1\game;
 
+use pocketmine\item\Item;
+use pocketmine\item\Potion;
+use pocketmine\level\Position;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use SavionLegends\Kohi1v1\Main;
@@ -9,7 +12,7 @@ use SavionLegends\Kohi1v1\utils\Utils;
 
 class KohiClass extends GameClass{
 
-    private $plugin, $utils, $server, $name, $status, $time, $players, $joinable;
+    private $plugin, $utils, $server, $name, $status, $time, $players, $joinable, $positions, $tempPos;
 
     /**
      * KohiClass constructor.
@@ -17,7 +20,7 @@ class KohiClass extends GameClass{
      * @param Utils $utils
      * @param $matchName
      */
-    public function __construct(Main $plugin, Utils $utils, $matchName){
+    public function __construct(Main $plugin, Utils $utils, $matchName, array $positions){
         $this->plugin = $plugin;
         $this->utils = $utils;
         $this->server = $plugin->getServer();
@@ -26,6 +29,8 @@ class KohiClass extends GameClass{
         $this->status = GameClass::WAITING;
         $this->time = 600;
         $this->joinable = true;
+        $this->positions = $positions;
+        $this->tempPos = 0;
     }
 
     /**
@@ -165,6 +170,23 @@ class KohiClass extends GameClass{
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getPositions(): array{
+        return $this->positions;
+    }
+
+    public function getNextPos(){
+        $this->tempPos++;
+        $positions = $this->getPositions();
+        $x = $positions["pos".$this->tempPos]["x"];
+        $y = $positions["pos".$this->tempPos]["y"];
+        $z = $positions["pos".$this->tempPos]["z"];
+        $level = $positions["pos".$this->tempPos]["level"];
+        return new Position($x, $y, $z, $this->getServer()->getLevelByName($level));
+    }
+
     public function win(Player $player){
         $player->sendMessage("You won on match #".$this->getName()."!");
         $this->end();
@@ -176,6 +198,28 @@ class KohiClass extends GameClass{
         foreach($this->getPlayers() as $name){
             $player = $this->getServer()->getPlayer($name);
             $player->sendMessage(TextFormat::YELLOW."Match has started!");
+
+            $player->getArmorInventory()->clearAll();
+            $player->getInventory()->clearAll();
+            $player->setMaxHealth(20);
+            $player->setHealth(20);
+
+            $inventory = $player->getInventory();
+            $armorInventory = $player->getArmorInventory();
+
+            $armorInventory->setHelmet(Item::get(Item::DIAMOND_HELMET));
+            $armorInventory->setChestplate(Item::get(Item::DIAMOND_CHESTPLATE));
+            $armorInventory->setLeggings(Item::get(Item::DIAMOND_LEGGINGS));
+            $armorInventory->setBoots(Item::get(Item::DIAMOND_BOOTS));
+            $armorInventory->sendContents($player);
+
+            $inventory->addItem(Item::get(Item::DIAMOND_SWORD));
+            $inventory->addItem(Item::get(Item::BOW));
+            $inventory->addItem(Item::get(Item::ARROW));
+            $inventory->addItem(Item::get(Item::SPLASH_POTION, Potion::HEALING, 32));
+            $inventory->addItem(Item::get(Item::SPLASH_POTION, Potion::SWIFTNESS, 10));
+            $inventory->sendContents($player);
+            $player->teleport($this->getNextPos());
         }
     }
 
@@ -195,6 +239,7 @@ class KohiClass extends GameClass{
         $this->status = GameClass::WAITING;
         $this->time = 600;
         $this->players = [];
+        $this->tempPos = 0;
     }
 
 }

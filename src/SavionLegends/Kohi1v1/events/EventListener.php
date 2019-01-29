@@ -2,9 +2,13 @@
 
 namespace SavionLegends\Kohi1v1\events;
 
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use SavionLegends\Kohi1v1\Main;
 use SavionLegends\Kohi1v1\utils\Utils;
@@ -76,6 +80,36 @@ class EventListener implements Listener{
                     $player->sendMessage(TextFormat::YELLOW."Position #".($i)." set! All done match #".$int." created!");
                     unset($this->getUtils()->isSetting[$username]);
                     break;
+            }
+        }
+    }
+
+    /**
+     * @param EntityDamageEvent $event
+     */
+    public function onHit(EntityDamageEvent $event){
+        $player = $event->getEntity();
+        if($player instanceof Player){
+            if($event instanceof EntityDamageByEntityEvent){
+                $damager = $event->getDamager();
+                if($damager instanceof Player){
+                    if($this->getUtils()->getGame($damager) !== null && $this->getUtils()->getGame($player) !== null){
+                        if($event->getCause() !== EntityDamageEvent::CAUSE_ENTITY_ATTACK or $event->getCause() !== EntityDamageEvent::CAUSE_PROJECTILE){
+                            $event->setCancelled(true);
+                        }
+                        if($player->getHealth() - $event->getFinalDamage() <= 0){
+                            $event->setCancelled(true);
+                            $match = $this->getUtils()->getGame($damager);
+                            if($match->getName() !== $this->getUtils()->getGame($player)->getName()){
+                                $this->getPlugin()->getLogger()->error("A problem with match winning has occurred!");
+                                $match->end();
+                                $this->getUtils()->getGame($player)->end();
+                                return;
+                            }
+                            $match->win($damager);
+                        }
+                    }
+                }
             }
         }
     }

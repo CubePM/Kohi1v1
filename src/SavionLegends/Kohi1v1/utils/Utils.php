@@ -64,7 +64,7 @@ class Utils{
 
     public static function registerMatches(){
         foreach(Main::getInstance()->matchesConfig->get("Kohi1v1") as $match){
-            self::$matches[$match["Name"]] = new KohiClass(Main::getInstance(), self::getInstance(), $match["Name"]);
+            self::$matches[$match["Name"]] = new KohiClass(Main::getInstance(), self::getInstance(), $match["Name"], $match["Positions"]);
         }
     }
 
@@ -105,11 +105,11 @@ class Utils{
                 return;
             }
             if(!$match->isJoinable()){
-                $player->sendMessage(TextFormat::RED."Match is not available try again later!");
+                $player->sendMessage(TextFormat::RED."Match #".$match->getName()." is not available try again later!");
                 return;
             }
             if($match->getStatus() !== GameClass::WAITING){
-                $player->sendMessage(TextFormat::RED."Match is not available try again later!");
+                $player->sendMessage(TextFormat::RED."Match #".$match->getName()." is not available try again later!");
                 return;
             }
             if(isset($this->inGame[$player->getName()])){
@@ -179,7 +179,7 @@ class Utils{
         $plugin->matchesConfig->setAll($cfg);
         $plugin->matchesConfig->save();
 
-        self::$matches[$int] = new KohiClass($plugin, $this, $int);
+        self::$matches[$int] = new KohiClass($plugin, $this, $int, $cfg["Kohi1v1"][$int]["Positions"]);
         return $int;
     }
 }
