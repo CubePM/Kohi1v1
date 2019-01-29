@@ -6,6 +6,7 @@ use FormAPI\FormAPI;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
+use SavionLegends\Kohi1v1\commands\CommandClass;
 use SavionLegends\Kohi1v1\events\EventListener;
 use SavionLegends\Kohi1v1\utils\Utils;
 
@@ -16,7 +17,7 @@ class Main extends PluginBase{
     public $matchesConfig;
 
     /* @var Utils*/
-    private $utils;
+    public $utils;
 
     /* @var \SavionLegends\Kohi1v1\Main*/
     private static $instance;
@@ -34,6 +35,7 @@ class Main extends PluginBase{
 
         FormAPI::register($this);
         Utils::registerMatches();
+        CommandClass::registerAll($this, $this->getServer()->getCommandMap());
 
         $this->getLogger()->info(TextFormat::GREEN."Enabled!");
     }

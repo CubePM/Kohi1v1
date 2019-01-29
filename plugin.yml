@@ -2,7 +2,14 @@ name: Kohi1v1
 author: SavionLegends
 main: SavionLegends\Kohi1v1\Main
 description: Kohi/Pot 1v1 for MC:BE!
-version: "0.1"
+version: "0.1_BETA"
 api:
   - 3.0.0
   - 3.2.5
+permissions:
+  kohi.command.main:
+    default: true
+    description: Kohi1v1 main command permission
+  kohi.command.main.create:
+    default: op
+    description: Kohi1v1 game creating command!
