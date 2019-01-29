@@ -2,4 +2,6 @@
   * **`How to use`**
     * Soon
   * **`Commands`**
-    * Soon
+    * 'Kohi1v1'
+        * Kohi1v1 main command! 
+        * Do /kohi1v1 create to make new matches!
