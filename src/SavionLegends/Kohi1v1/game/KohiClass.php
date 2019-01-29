@@ -215,7 +215,7 @@ class KohiClass extends GameClass{
 
             $inventory->addItem(Item::get(Item::DIAMOND_SWORD));
             $inventory->addItem(Item::get(Item::BOW));
-            $inventory->addItem(Item::get(Item::ARROW));
+            $inventory->addItem(Item::get(Item::ARROW, 0, 32));
             $inventory->addItem(Item::get(Item::SPLASH_POTION, Potion::HEALING, 32));
             $inventory->addItem(Item::get(Item::SPLASH_POTION, Potion::SWIFTNESS, 10));
             $inventory->sendContents($player);
@@ -227,13 +227,13 @@ class KohiClass extends GameClass{
         if(isset(Utils::$tasks[$this->getName()])){
             $this->getPlugin()->getScheduler()->cancelTask(Utils::$tasks[$this->getName()]);
             unset(Utils::$tasks[$this->getName()]);
-            if(count($this->getPlayers()) !== 0){
-                foreach($this->getPlayers() as $name){
-                    $player = $this->getServer()->getPlayer($name);
-                    $player->getInventory()->clearAll();
-                    $player->setHealth($player->getMaxHealth());
-                    $this->removePlayer($player);
-                }
+        }
+        if(count($this->getPlayers()) !== 0){
+            foreach($this->getPlayers() as $name){
+                $player = $this->getServer()->getPlayer($name);
+                $player->getInventory()->clearAll();
+                $player->setHealth($player->getMaxHealth());
+                $this->removePlayer($player);
             }
         }
         $this->status = GameClass::WAITING;

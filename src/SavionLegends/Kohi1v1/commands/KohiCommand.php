@@ -5,12 +5,12 @@ namespace SavionLegends\Kohi1v1\commands;
 
 
 use pocketmine\command\CommandSender;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use SavionLegends\Kohi1v1\Main;
 use SavionLegends\Kohi1v1\utils\Utils;
-use SavionLegends\Kohi1v1\commands\CommandClass;
 
-class KohiCommand extends CommandClass {
+class KohiCommand extends CommandClass{
 
     /**
      * KohiCommand constructor.
@@ -55,6 +55,10 @@ class KohiCommand extends CommandClass {
      */
     public function execute(CommandSender $sender, string $commandLabel, array $args){
        if(!$this->testPermission($sender)){
+           return false;
+       }
+       if(!$sender instanceof Player){
+           $sender->sendMessage(TextFormat::RED."Please join the server to run commands!");
            return false;
        }
        if(isset($args[0]) && strtolower($args[0]) === "create"){

@@ -5,9 +5,7 @@ namespace SavionLegends\Kohi1v1\events;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use SavionLegends\Kohi1v1\Main;
@@ -101,7 +99,7 @@ class EventListener implements Listener{
                             $event->setCancelled(true);
                             $match = $this->getUtils()->getGame($damager);
                             if($match->getName() !== $this->getUtils()->getGame($player)->getName()){
-                                $this->getPlugin()->getLogger()->error("A problem with match winning has occurred!");
+                                $this->getPlugin()->getLogger()->error(TextFormat::RED."A problem with match winning has occurred!");
                                 $match->end();
                                 $this->getUtils()->getGame($player)->end();
                                 return;
