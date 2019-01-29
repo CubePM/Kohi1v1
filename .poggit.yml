@@ -1,0 +1,7 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/CubePM/Kohi1v1
+branches:
+- master
+projects:
+  Kohi1v1:
+    path: ""
+...
