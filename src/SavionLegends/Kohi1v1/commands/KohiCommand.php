@@ -61,6 +61,10 @@ class KohiCommand extends CommandClass{
            $sender->sendMessage(TextFormat::RED."Please join the server to run commands!");
            return false;
        }
+       if(!isset($args[0])){
+           $sender->sendMessage($this->getUsage());
+           return false;
+       }
        if(isset($args[0]) && strtolower($args[0]) === "create"){
            if(isset($this->getUtils()->isSetting[$sender->getName()])){
                $sender->sendMessage(TextFormat::RED."You already are setting a game!");
@@ -74,6 +78,9 @@ class KohiCommand extends CommandClass{
                $sender->sendMessage(TextFormat::RED."You don't have permission to use that command.");
            }
        }
+        if(isset($args[0]) && strtolower($args[0]) === "remove"){
+            //TODO
+        }
        return true;
     }
 

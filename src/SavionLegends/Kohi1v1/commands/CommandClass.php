@@ -59,6 +59,12 @@ class CommandClass extends Command{
             new KohiCommand($main, "kohi", "Kohi1v1 main command!", "/kohi [create]")]);
     }
 
+    /**
+     * @param CommandSender $sender
+     * @param string $commandLabel
+     * @param array $args
+     * @return bool|mixed
+     */
     public function execute(CommandSender $sender, string $commandLabel, array $args){
         if(parent::testPermission($sender) === false){
             return false;

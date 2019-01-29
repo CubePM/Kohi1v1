@@ -178,6 +178,9 @@ class KohiClass extends GameClass{
         return $this->positions;
     }
 
+    /**
+     * @return Position
+     */
     public function getNextPos(){
         $this->tempPos++;
         $positions = $this->getPositions();
