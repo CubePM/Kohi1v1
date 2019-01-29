@@ -66,6 +66,9 @@ class Utils{
 
     public static function registerMatches(){
         foreach(Main::getInstance()->matchesConfig->get("Kohi1v1") as $match){
+            if(!isset($match["Name"])){
+                break;
+            }
             self::$matches[$match["Name"]] = new KohiClass(Main::getInstance(), self::getInstance(), $match["Name"], $match["Positions"]);
         }
     }

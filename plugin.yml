@@ -8,8 +8,11 @@ api:
   - 3.2.5
 permissions:
   kohi.command.main:
-    default: op
+    default: true
     description: Kohi1v1 main command permission
   kohi.command.main.create:
     default: op
     description: Kohi1v1 game creating command!
+  kohi.command.main.join:
+    default: true
+    description: Kohi1v1 game joining command!

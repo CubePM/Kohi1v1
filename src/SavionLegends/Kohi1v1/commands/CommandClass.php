@@ -56,7 +56,7 @@ class CommandClass extends Command{
      */
     public static function registerAll(Main $main, CommandMap $map){
         $map->registerAll("kohi1v1", [
-            new KohiCommand($main, "kohi", "Kohi1v1 main command!", "/kohi [create]")]);
+            new KohiCommand($main, "kohi", "Kohi1v1 main command!", "/kohi [create|join|remove {game number}]")]);
     }
 
     /**
