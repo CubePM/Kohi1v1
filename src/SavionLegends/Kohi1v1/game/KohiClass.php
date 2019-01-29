@@ -19,6 +19,7 @@ class KohiClass extends GameClass{
      * @param Main $plugin
      * @param Utils $utils
      * @param $matchName
+     * @param array $positions
      */
     public function __construct(Main $plugin, Utils $utils, $matchName, array $positions){
         $this->plugin = $plugin;

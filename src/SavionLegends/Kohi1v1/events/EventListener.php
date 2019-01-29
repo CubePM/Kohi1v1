@@ -6,6 +6,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
+use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use SavionLegends\Kohi1v1\Main;
@@ -37,6 +38,14 @@ class EventListener implements Listener{
      */
     public function getUtils(): Utils{
         return $this->utils;
+    }
+
+    /**
+     * @param PlayerJoinEvent $event
+     */
+    public function onJoin(PlayerJoinEvent $event){
+        $player = $event->getPlayer();
+        $this->getUtils()->setStatsManager($player);
     }
 
     /**

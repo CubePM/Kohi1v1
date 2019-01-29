@@ -17,8 +17,14 @@ abstract class GameClass{
      * @param Main $plugin
      * @param Utils $utils
      * @param $matchName
+     * @param array $positions
      */
-    abstract public function __construct(Main $plugin, Utils $utils, $matchName);
+    abstract public function __construct(Main $plugin, Utils $utils, $matchName, array $positions);
+
+    /**
+     * @return array
+     */
+    abstract public function getPositions(): array;
 
     /**
      * @return mixed
