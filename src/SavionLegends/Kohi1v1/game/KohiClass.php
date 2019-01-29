@@ -166,7 +166,7 @@ class KohiClass extends GameClass{
     }
 
     public function win(Player $player){
-        //TODO
+        $player->sendMessage("You won on match #".$this->getName()."!");
         $this->end();
     }
 

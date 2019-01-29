@@ -3,15 +3,17 @@
 namespace SavionLegends\Kohi1v1\utils;
 
 use FormAPI\FormAPI;
+use pocketmine\level\Position;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use SavionLegends\Kohi1v1\game\GameClass;
 use SavionLegends\Kohi1v1\game\KohiClass;
 use SavionLegends\Kohi1v1\Main;
+use SavionLegends\Kohi1v1\tasks\KohiTask;
 
 class Utils{
 
-    private $plugin;
+    private $plugin, $server;
 
     private static $instance;
 
@@ -19,6 +21,7 @@ class Utils{
     public static $tasks = [];
 
     public $inGame = [];
+    public $isSetting = [];
 
     /**
      * Utils constructor.
@@ -27,6 +30,7 @@ class Utils{
     public function __construct(Main $plugin){
         self::$instance = $this;
         $this->plugin = $plugin;
+        $this->server = $plugin->getServer();
     }
 
     /**
@@ -44,6 +48,13 @@ class Utils{
     }
 
     /**
+     * @return \pocketmine\Server
+     */
+    public function getServer(): \pocketmine\Server{
+        return $this->server;
+    }
+
+    /**
      * @param Player $player
      * @return GameClass
      */
@@ -53,7 +64,7 @@ class Utils{
 
     public static function registerMatches(){
         foreach(Main::getInstance()->matchesConfig->get("Kohi1v1") as $match){
-            self::$matches[$match["Name"]] = new KohiClass(Main::getInstance(), self::getInstance(), $match["Name"]);//TODO
+            self::$matches[$match["Name"]] = new KohiClass(Main::getInstance(), self::getInstance(), $match["Name"]);
         }
     }
 
@@ -72,7 +83,6 @@ class Utils{
      * @param $response
      */
     public function handleGameForm(Player $player, $response): void{
-        echo var_dump($response);
         if(!isset($response[0])){
             return;
         }
@@ -83,11 +93,11 @@ class Utils{
      * @param Player $player
      */
     public function joinGame(Player $player){
+        $matchesConfig = $this->getPlugin()->matchesConfig->getAll();
         if(count(self::$matches) === 0){
             $player->sendMessage(TextFormat::RED."No matches available!");
             return;
         }
-
         $match = self::$matches[rand(1, count(self::$matches))];
         if($match instanceof KohiClass){
             if(count($match->getPlayers()) === 2){
@@ -106,7 +116,16 @@ class Utils{
                 $player->sendMessage(TextFormat::RED."You already are in a game!");
                 return;
             }
-            $player->sendMessage(":P");
+            if(count($match->getPlayers()) === 0){
+                $task = new KohiTask($this->getPlugin(), $this, $match);
+                $h = $this->getPlugin()->getScheduler()->scheduleRepeatingTask($task, 20);
+                $task->setHandler($h);
+                self::$tasks[$match->getName()] = $task->getTaskId();
+            }
+            $key = $matchesConfig["Kohi1v1"][$match->getName()]["Positions"]["lobby"];
+            $position = new Position($key["x"], $key["y"] + 2, $key["z"], $this->getServer()->getLevelByName($key["level"]));
+            $player->teleport($position);
+            $match->addPlayer($player);
         }
     }
 
@@ -139,5 +158,28 @@ class Utils{
         $message = str_replace("{ITALIC}", TextFormat::ITALIC, $message);
         $message = str_replace("{RESET}", TextFormat::RESET, $message);
         return $message;
+    }
+
+    /**
+     * @param Main $plugin
+     * @param array|null $lobby
+     * @param array|null $pos1
+     * @param array|null $pos2
+     * @return int
+     */
+    public function newMatch(Main $plugin, array $lobby = null, array $pos1 = null, array $pos2 = null){
+        $cfg = $plugin->matchesConfig->getAll();
+
+        $int = count($cfg["Kohi1v1"]) + 1;
+        $cfg["Kohi1v1"][$int] = ["Name" => "", "Positions" => ["pos1" => [], "pos2" => []]];
+        $plugin->matchesConfig->setAll($cfg);
+        $plugin->matchesConfig->save();
+
+        $cfg["Kohi1v1"][$int] = ["Name" => $int, "Positions" => ["lobby" => $lobby, "pos1" => $pos1, "pos2" => $pos2]];
+        $plugin->matchesConfig->setAll($cfg);
+        $plugin->matchesConfig->save();
+
+        self::$matches[$int] = new KohiClass($plugin, $this, $int);
+        return $int;
     }
 }
