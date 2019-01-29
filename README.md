@@ -1,4 +1,6 @@
 # Kohi1v1
+* **`Description`**
+    * Kohi1v1/Pot1v1 is where two players duel out in a arena and fight with a full diamond armor, a diamond sword, bow and arrows, a splash potions. Splash potions are swiftness and healing.
   * **`How to use`**
     * Soon
   * **`Commands`**
